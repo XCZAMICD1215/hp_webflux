@@ -11,5 +11,5 @@ public interface BullRepo {
 
     Flux<BullPo> findAll();
 
-    Mono<BullPo> findById(Integer id);
+    Mono<BullPo> findById(Long id);
 }

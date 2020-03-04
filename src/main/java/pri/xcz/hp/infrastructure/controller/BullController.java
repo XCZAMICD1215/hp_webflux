@@ -3,6 +3,7 @@ package pri.xcz.hp.infrastructure.controller;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.web.bind.annotation.*;
+import pri.xcz.hp.application.gateway.IdGateway;
 import pri.xcz.hp.application.model.BullPo;
 import pri.xcz.hp.application.repo.BullRepo;
 import pri.xcz.hp.common.model.BaseErrors;
@@ -17,12 +18,15 @@ import reactor.core.publisher.Mono;
 public class BullController {
 
     private final BullRepo bullRepo;
+    private final IdGateway idGateway;
 
     @PostMapping("/bull")
     public Mono<BullDto> create(@RequestBody BullDto dto) {
-        BullPo pojo1 = BullPo.builder().id(generateId()).name(dto.getName()).age(dto.getAge())
-                .createOn(System.currentTimeMillis()).lastModifyOn(System.currentTimeMillis()).build();
-        return bullRepo.save(pojo1).map(BullDto::new);
+        return idGateway.nextId()
+                .map(id -> BullPo.builder().id(id).name(dto.getName()).age(dto.getAge())
+                        .createOn(System.currentTimeMillis()).lastModifyOn(System.currentTimeMillis()).build())
+                .flatMap(bullRepo::save)
+                .map(BullDto::new);
     }
 
     @PutMapping("/bull")
@@ -40,7 +44,7 @@ public class BullController {
     }
 
     @GetMapping("/bull/{id}")
-    public Mono<BullDto> findById(@PathVariable Integer id) {
+    public Mono<BullDto> findById(@PathVariable Long id) {
         return bullRepo.findById(id).map(BullDto::new);
     }
 
@@ -49,13 +53,9 @@ public class BullController {
         return Mono.error(new BaseException(BaseErrors.unknownError1));
     }
 
-    @GetMapping("/err2")
+    @GetMapping("/err")
     public Mono err2(){
         return Mono.error(new BaseException(BaseErrors.unknownError2));
     }
 
-
-    private Integer generateId() {
-        return RandomUtils.nextInt();
-    }
 }

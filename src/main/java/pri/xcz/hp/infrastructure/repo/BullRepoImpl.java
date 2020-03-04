@@ -1,11 +1,13 @@
 package pri.xcz.hp.infrastructure.repo;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import pri.xcz.hp.application.model.BullPo;
 import pri.xcz.hp.application.repo.BullRepo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Component
 @AllArgsConstructor
 public class BullRepoImpl implements BullRepo {
 
@@ -29,7 +31,7 @@ public class BullRepoImpl implements BullRepo {
     }
 
     @Override
-    public Mono<BullPo> findById(Integer id) {
+    public Mono<BullPo> findById(Long id) {
         return repo.findById(id);
     }
 }

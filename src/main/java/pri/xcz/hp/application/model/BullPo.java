@@ -20,7 +20,7 @@ import java.util.Objects;
 @Builder(toBuilder = true)
 public class BullPo implements Persistable {
     @Id
-    private Integer id;
+    private Long id;
     private String name;
     private Integer age;
     @Column("create_on")
