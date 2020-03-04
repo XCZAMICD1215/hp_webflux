@@ -5,6 +5,8 @@ import org.apache.commons.lang3.RandomUtils;
 import org.springframework.web.bind.annotation.*;
 import pri.xcz.hp.application.model.BullPo;
 import pri.xcz.hp.application.repo.BullRepo;
+import pri.xcz.hp.common.model.BaseErrors;
+import pri.xcz.hp.common.model.BaseException;
 import pri.xcz.hp.infrastructure.model.BullDto;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,6 +43,17 @@ public class BullController {
     public Mono<BullDto> findById(@PathVariable Integer id) {
         return bullRepo.findById(id).map(BullDto::new);
     }
+
+    @GetMapping("/err1")
+    public Mono err1(){
+        return Mono.error(new BaseException(BaseErrors.unknownError1));
+    }
+
+    @GetMapping("/err2")
+    public Mono err2(){
+        return Mono.error(new BaseException(BaseErrors.unknownError2));
+    }
+
 
     private Integer generateId() {
         return RandomUtils.nextInt();
