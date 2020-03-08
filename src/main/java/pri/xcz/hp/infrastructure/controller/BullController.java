@@ -49,13 +49,19 @@ public class BullController {
     }
 
     @GetMapping("/err1")
-    public Mono err1(){
+    public Mono err1() {
         return Mono.error(new BaseException(BaseErrors.unknownError1));
     }
 
     @GetMapping("/err")
-    public Mono err2(){
+    public Mono err2() {
         return Mono.error(new BaseException(BaseErrors.unknownError2));
+    }
+
+
+    @GetMapping("/test")
+    public Mono test() {
+        return Mono.just("test");
     }
 
 }
